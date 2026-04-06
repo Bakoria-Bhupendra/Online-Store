@@ -1,6 +1,7 @@
 package com.bobby.onlinestore.controller;
 
 import com.bobby.onlinestore.Dtos.ProductDto;
+import com.bobby.onlinestore.Dtos.UserDto;
 import com.bobby.onlinestore.entities.Category;
 import com.bobby.onlinestore.entities.Product;
 import com.bobby.onlinestore.mapper.ProductMapper;
@@ -26,7 +27,7 @@ public class ProductController {
         if  (categoryId != null) {
             products = productRepository.findByCategoryId(categoryId);
         } else {
-            products = productRepository.findAll();
+            products = productRepository.findAllWithCategoryId();
         }
         return products
                 .stream()
@@ -41,4 +42,5 @@ public class ProductController {
         }
         return ResponseEntity.ok(productMapper.toProductDto(product));
     }
+
 }
