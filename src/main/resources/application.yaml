@@ -5,5 +5,5 @@ spring:
     url: jdbc:mysql://localhost:3306/store_api?createDatabaseIfNotExist=true
     username: root
     password: zxc22331@NBnb!
-    jpa:
+  jpa:
       show-sql: true

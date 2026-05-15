@@ -1,23 +1,60 @@
 package com.bobby.onlinestore.entities;
 
-@lombok.Getter
-@lombok.Setter@jakarta.persistence.Entity
-@jakarta.persistence.Table(name = "carts")
+import com.bobby.onlinestore.Dtos.CartItemsDto;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "carts")
 public class Cart {
-@jakarta.persistence.Id
-@jakarta.validation.constraints.Size(max = 16)
-@jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-@jakarta.persistence.Column(name = "id", nullable = false, length = 16)
-private java.util.UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
+    private UUID id;
 
-@jakarta.validation.constraints.NotNull
-@org.hibernate.annotations.ColumnDefault("(curdate())")
-@jakarta.persistence.Column(name = "date_created", nullable = false)
-private java.time.LocalDate dateCreated;
 
-@jakarta.persistence.OneToMany(mappedBy = "cart")
-private java.util.Set<com.bobby.onlinestore.entities.CartItem> cartItems = new java.util.LinkedHashSet<>();
+    @Column(name = "date_created", insertable = false, updatable = false)
+    private LocalDate dateCreated;
 
+    @OneToMany(mappedBy = "cart", cascade =  CascadeType.MERGE, fetch =  FetchType.EAGER)
+    private Set<CartItem> cartItems = new LinkedHashSet<>();
+
+    public BigDecimal getTotalPrice() {
+        return cartItems.stream()
+                .map(CartItem::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public CartItem getItem(Long productId) {
+        return cartItems.stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public CartItem addItem(Product product ) {
+        var cartItem = getItem(product.getId());
+
+        if (cartItem != null) {
+            cartItem.setQuantity(cartItem.getQuantity() + 1);
+        } else {
+            cartItem = new CartItem();
+            cartItem.setProduct(product);
+            cartItem.setQuantity(1);
+            cartItem.setCart(this);
+            cartItems.add(cartItem);
+        }
+        return cartItem;
+    }
 
 
 }
