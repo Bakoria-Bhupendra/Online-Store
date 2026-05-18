@@ -7,6 +7,9 @@ import com.bobby.onlinestore.Dtos.UpdateCartItemDto;
 import com.bobby.onlinestore.exceptions.CartNotFoundException;
 import com.bobby.onlinestore.exceptions.ProductNotFoundException;
 import com.bobby.onlinestore.services.CartService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/carts")
+@Tag(name = "Cart")
 public class CartController {
     private final CartService cartService;
 
@@ -31,7 +35,8 @@ public class CartController {
     }
 
     @PostMapping("{cartId}/items")
-    public ResponseEntity<CartItemsDto> addToCart(@PathVariable UUID cartId, @RequestBody AddProductRequst request) {
+    @Operation(summary = "Add a product to the cart")
+    public ResponseEntity<CartItemsDto> addToCart(@Parameter(description = "The Id of the cart.") @PathVariable UUID cartId, @RequestBody AddProductRequst request) {
         var cartItemDto = cartService.addCart(cartId, request.getProductId());
         return ResponseEntity.status(HttpStatus.CREATED).body(cartItemDto);
     }
