@@ -8,6 +8,9 @@ spring:
   jpa:
     show-sql: true
 
+  jwt:
+    secret: ${JWT_SECRET}
+
 
 springdoc:
   api-docs:
