@@ -4,6 +4,7 @@ import com.bobby.onlinestore.Dtos.ChangePasswordRequest;
 import com.bobby.onlinestore.Dtos.RegisterUserRequest;
 import com.bobby.onlinestore.Dtos.UpdateUserRequest;
 import com.bobby.onlinestore.Dtos.UserDto;
+import com.bobby.onlinestore.entities.Role;
 import com.bobby.onlinestore.mapper.UserMapper;
 import com.bobby.onlinestore.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -58,6 +59,7 @@ public class UserController {
         }
         var user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.USER);
         userRepository.save(user);
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(userMapper.toDto(user));
