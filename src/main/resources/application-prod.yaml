@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+websiteURL: https://mystore.com
+
+
+
+springdoc:
+  api-docs:
+    path: /api-docs

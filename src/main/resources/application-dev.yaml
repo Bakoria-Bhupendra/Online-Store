@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/store_api?createDatabaseIfNotExist=true
+    username: root
+    password: zxc22331@NBnb!
+  jpa:
+    show-sql: true
+websiteURL: http://localhost:4242/
+
+
+
+springdoc:
+  api-docs:
+    path: /api-docs
