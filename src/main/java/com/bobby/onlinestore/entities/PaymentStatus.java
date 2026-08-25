@@ -1,6 +1,6 @@
 package com.bobby.onlinestore.entities;
 
-public enum OrderStatus {
+public enum PaymentStatus {
     PENDING,
     PROCESSING,
     PAID,
